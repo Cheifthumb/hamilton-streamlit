@@ -1,7 +1,7 @@
 import pandas as pd
 
 # ✅ Load and prepare data
-data = pd.read_csv('Betting_Simulation/predicted_win_probabilities.23-25.csv')
+data = pd.read_csv('Betting_Simulation/predicted_win_probabilities.24-25.csv')
 data['Place'] = pd.to_numeric(data['Place'], errors='coerce')
 data = data.sort_values(by=['Date of Race', 'Time']).reset_index(drop=True)
 data['Race_ID'] = data['Date of Race'].astype(str) + "_" + data['Time'].astype(str)
@@ -14,8 +14,8 @@ data['Expected_Value'] = (data['Predicted_Win_Probability'] * (data['Odds_To_Use
 # ✅ Settings
 bankroll = 10000
 bankroll_perc = 0.1
-min_ev = -5
-min_kelly = -1
+min_ev = 0.00
+min_kelly = 0.00
 max_odds = 100.0
 winrate_filter_type = 'none'  # or 'fixed', 'dynamic'
 fixed_winrate_threshold = 0.03
@@ -25,7 +25,7 @@ forecast_results = []
 # ✅ Simulation
 for race_id, race_df in data.groupby('Race_ID', sort=False):
     full_field_size = len(race_df)
-    if not ((4 <= full_field_size <= 5) or (full_field_size >= 41)):
+    if not ((4 <= full_field_size <= 6) or (full_field_size >= 41)):
         continue
 
     full_race = race_df.copy()
@@ -106,7 +106,7 @@ for race_id, race_df in data.groupby('Race_ID', sort=False):
 
 # ✅ Save forecast results
 forecast_df = pd.DataFrame(forecast_results)
-forecast_df.to_excel('betting_simulation/forecast_only_results.xlsx', index=False)
+forecast_df.to_excel('betting_simulation/forecast_only_results23-25.xlsx', index=False)
 
 # ✅ Summary
 if not forecast_df.empty:

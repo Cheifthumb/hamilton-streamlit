@@ -12,7 +12,7 @@ data = pd.read_excel('featured_data/02-25_FEATURED.xlsx')
 
 # Pre-race features
 pre_race_features = [
-    'Going', 'Distance', 'Class', 'Stall', 'Official Rating', 'Age', 'Weight',
+    'Going', 'Distance', 'Class', 'Stall', 'Official Rating', 'Age',
     'SP Fav', 'Industry SP', 'Forecasted Odds',
     'Runs last 18 months', 'Wins Last 5 races',
     'Avg % SP Drop Last 5 races', 'Avg % SP Drop last 18 mths',
