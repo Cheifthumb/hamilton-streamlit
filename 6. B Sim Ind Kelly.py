@@ -18,14 +18,14 @@ data['Expected_Value'] = (data['Predicted_Win_Probability'] * (data['Odds_To_Use
 # ✅ Simulation settings
 initial_bankroll = 10000
 current_bankroll = initial_bankroll
-bankroll_perc = 0.01
+bankroll_perc = 0.1
 min_ev_threshold = 0.10
 min_kelly_fraction = 0.01
 max_odds_threshold = 100.0
 min_odds_threshold = 1.5  # ✅ New minimum odds threshold
 
 # ✅ Stake mode: 'kelly', 'fixed', or 'winrate'
-stake_mode = 'winrate'
+stake_mode = 'kelly'
 fixed_stake_perc = 0.01
 
 # ✅ Win rate filter settings
@@ -91,9 +91,12 @@ for race_id, race_df in data.groupby('Race_ID', sort=False):
     )
 
     # ✅ Calculate stake based on selected mode
-    race_df['Stake'] = 0
+    race_df['Stake'] = 100
     if stake_mode == 'kelly':
-        race_df.loc[race_df['Bet_Placed'], 'Stake'] = race_df.loc[race_df['Bet_Placed'], 'Kelly_Fraction'] * stake_pool
+        kelly_stakes = race_df.loc[race_df['Bet_Placed'], 'Kelly_Fraction'] * stake_pool
+        race_df.loc[race_df['Bet_Placed'], 'Stake'] = kelly_stakes.clip(lower=100)
+
+
     elif stake_mode == 'fixed':
         qualifying_bets = race_df['Bet_Placed'].sum()
         if qualifying_bets > 0:
